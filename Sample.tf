@@ -10,6 +10,7 @@ resource "aws_instance" "web-server" {
   
 }
 
-resource "aws_s3" "" {
+resource "aws_s3" "buckets" {
+    the = ""
   
 }

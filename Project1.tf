@@ -41,3 +41,18 @@ resource "aws_vpc" "myvpc" {
   cidr_block =  = var.vpc_cidr
   enable_dns_hostnames = "true"
 }
+
+resource "aws_subnet" "public_subnet1" {
+    cidr_block = var.public_subnet1_cidr
+    vpc_id = aws_vpc.myvpc.id
+    map_public_ip_on_launch = "true"
+    availability_zone = data.aws_availability_zones.available
+}
+
+###############################################################################################################
+# Data 
+
+data "aws_availability_zones" "available" {
+    state = "available"
+  
+}

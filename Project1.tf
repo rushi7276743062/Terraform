@@ -37,11 +37,13 @@ provider "aws" {
 ################################################################################################################
 # Resources
 
+# AWS VPC
 resource "aws_vpc" "myvpc" {
   cidr_block =  = var.vpc_cidr
   enable_dns_hostnames = "true"
 }
 
+# AWS Subnet 
 resource "aws_subnet" "public_subnet1" {
     cidr_block = var.public_subnet1_cidr
     vpc_id = aws_vpc.myvpc.id
@@ -49,8 +51,44 @@ resource "aws_subnet" "public_subnet1" {
     availability_zone = data.aws_availability_zones.available
 }
 
+resource "aws_subnet" "private_subnet1" {
+  cidr_block = var.private_subnet1_cidr
+  vpc_id = aws_vpc.myvpc.id
+  availability_zone = data.aws_availability_zones.available
+}
+
+# AWS Internet Gateway
+
+resource "aws_internet_gateway" "my-igw" {
+  vpc_id = aws_vpc.myvpc.id 
+}
+
+# AWS Route Table
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.myvpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.my-igw
+  }
+}
+
+resource "aws_route_table" "private_route_table" {
+  vpc_id = aws_vpc.myvpc.id
+}
 
 
+# AWS Route Table Association
+resource "aws_route_table_association" "route_public1" {
+  subnet_id = aws_subnet.public_subnet1.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+resource "aws_route_table_association" "route-private1" {
+  subnet_id = aws_subnet.private_subnet1.id
+  route_table_id = aws_route_table.private_route_table.id
+  
+}
 ###############################################################################################################
 # Data 
 

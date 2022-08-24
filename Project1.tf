@@ -174,7 +174,17 @@ data "aws_ami" "aws-linux" {
 ################################################################################################################
 # Outputs
 
-output "instance-dns" {
-  value = public_dns
+output "instance-public-dns" {
+  value = aws_instance.my-ec2instance.public_dns
+  
+}
+
+output "instance-private-dns" {
+  value = aws_instance.my-ec2instance.private_dns
+  
+}
+
+output "instance-publicIP" {
+  value = aws_instance.my-ec2instance.public_ip
   
 }

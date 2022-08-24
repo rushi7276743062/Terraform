@@ -89,6 +89,59 @@ resource "aws_route_table_association" "route-private1" {
   route_table_id = aws_route_table.private_route_table.id
   
 }
+
+# AWS Security Groups
+resource "aws_security_group" "webserverSG" {
+  name = "webserver-SG"
+  vpc_id = aws_vpc.myvpc.id
+
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = "0.0.0.0/0"
+  }
+  
+}
+
+
+# AWS Instance EC2
+resource "aws_instance" "my-ec2instance" {
+  ami = data.aws_ami.aws-linux.id
+  instance_type = "t2.micro"
+  subnet_id = aws_subnet.public_subnet1.id
+  vpc_security_group_ids = [aws_security_group.webserverSG.id]
+  key_name = var.ssh_key_name
+
+  connection {
+    type = "ssh"
+    host = self.public_ip
+    user = "ec2-user"
+    private_key = file(var.private_key_path)
+  }
+}
+
 ###############################################################################################################
 # Data 
 

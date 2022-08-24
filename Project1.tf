@@ -49,6 +49,8 @@ resource "aws_subnet" "public_subnet1" {
     availability_zone = data.aws_availability_zones.available
 }
 
+
+
 ###############################################################################################################
 # Data 
 
@@ -64,5 +66,21 @@ data "aws_ami" "aws-linux" {
       name = "name"
       values = ["amzn-ami-hvm*"]
     }
+    filter {
+      name = "root-device-type"
+      values = ["ebs"]
+    }
+    filter {
+      name = "virtualization-type"
+      values = ["hvm"]
+    }
+  
+}
+
+################################################################################################################
+# Outputs
+
+output "instance-dns" {
+  value = public_dns
   
 }

@@ -1,3 +1,5 @@
+###############################################################################################################
+# Variable
 
 variable "aws_access_key" {}
 
@@ -139,7 +141,7 @@ resource "aws_instance" "my-ec2instance" {
     host = self.public_ip
     user = "ec2-user"
     private_key = file(var.private_key_path)
-    
+
   }
 }
 

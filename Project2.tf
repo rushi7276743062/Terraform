@@ -33,3 +33,37 @@ variable "enviroment_map" {
   }
 
 }
+
+variable "enviroment_instance_type" {
+    type = map(string)
+    default = {
+    "DEV" = "t2.micro",
+    "QA" = "t2.micro",
+    "Stage" = "t2.micro"
+    "Production" = "t2.micro"
+    }
+}
+
+variable "enviroment_instance_setting" {
+    type = map(object({instance_type=string,monitoring=bool}))
+    default = {
+      "DEV" = {
+        instance_type = "t2.micro"
+        monitoring = false
+      }
+      "QA" = {
+        instance_type = "t2.micro"
+        monitoring = false
+      }
+      "Stage" = {
+        instance_type = "t2.micro"
+        monitoring = false
+      }
+      "Production" = {
+        instance_type = "t2.micro"
+        monitoring = false
+      }
+
+    }
+  
+}
